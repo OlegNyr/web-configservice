@@ -2,7 +2,7 @@ image: reg.agria.pro:4567/docker/jdk8
 
 stages:
   - build
-#  - test
+  - test
   - deploy
 
 variables:
