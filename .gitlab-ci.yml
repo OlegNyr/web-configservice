@@ -64,7 +64,7 @@ deploy_prod:
     name: $CI_BUILD_REF_NAME
   script:
     - git branch
-    - gradle release -Prelease.disableChecks -Prelease.pushTagsOnly
+    - ./gradlew release -Prelease.disableChecks -Prelease.pushTagsOnly
     - git push --tags
 
 #    - echo $CI_REPOSITORY_URL
