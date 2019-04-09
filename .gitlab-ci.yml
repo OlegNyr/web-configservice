@@ -77,7 +77,7 @@ deploy_prod:
     - git checkout $CI_BUILD_REF_NAME
     - git pull origin $CI_BUILD_REF_NAME
     - git status
-    - ./gradlew release -Prelease.useAutomaticVersion=true
+    - ./gradlew release -Prelease.useAutomaticVersion=true --debug
   cache:
     untracked: true
     policy: pull
