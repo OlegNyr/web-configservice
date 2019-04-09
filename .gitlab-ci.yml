@@ -8,6 +8,7 @@ stages:
 variables:
   GRADLE_OPTS: "-Dorg.gradle.daemon=false"
   TZ: "Europe/Moscow"
+  GIT_STRATEGY: clone
 
 before_script:
   - echo `pwd` # debug
