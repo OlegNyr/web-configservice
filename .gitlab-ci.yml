@@ -40,7 +40,7 @@ deploy_dev:
   stage: deploy
   image: reg.agria.pro:4567/docker/jdk8
   script:
-    - ./gradlew assemble
+    - ./gradlew assemble publish
   cache:
     untracked: true
     policy: pull
