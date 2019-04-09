@@ -3,7 +3,6 @@ image: reg.agria.pro:4567/docker/jdk8
 stages:
   - build
   - test
-  - assemble
   - deploy
 
 variables:
@@ -37,8 +36,8 @@ test:
 
 #////////////////////////////////////////////////////////////////////////////////////
 #Собираем артефакты для формирования образов
-assemble_dev:
-  stage: assemble
+deploy_dev:
+  stage: deploy
   image: reg.agria.pro:4567/docker/jdk8
   script:
     - ./gradlew assemble
@@ -55,8 +54,8 @@ assemble_dev:
 
 #Можем получить багу, тесты для одного а прогнали релиз для другого,
 #так как в скрипте делаем pull, получается данны в ветке могут изменится
-assemble_prod:
-  stage: assemble
+deploy_prod:
+  stage: deploy
   image: reg.agria.pro:4567/docker/jdk8:jdkgit
   variables:
     CI_REPOSITORY_URL: git@dev.agria.pro:agri/proc.git
@@ -84,168 +83,3 @@ assemble_prod:
     expire_in: 100 minute
   only:
     - /^prod/.*/
-
-#////////////////////////////////////////////////////////////////////////////////////
-#Формируем образы докеров для входящего шлюза
-deploy-gate:
-  image: docker:latest
-  stage: deploy
-  services:
-    - docker:dind
-  tags: [docker]
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-
-  script:
-    #Формируем образы и пушем для postgres
-    - docker build gateflux/build/dockerlayers --pull -t "$CI_REGISTRY_IMAGE/gate:$CI_COMMIT_REF_SLUG"
-    - docker push "$CI_REGISTRY_IMAGE/gate:$CI_COMMIT_REF_SLUG"
-  except:
-    - master
-
-deploy-jsonapi:
-  image: docker:latest
-  stage: deploy
-  services:
-    - docker:dind
-  tags: [docker]
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-
-  script:
-    #Формируем образы и пушем для postgres
-    - docker build jsonapi/build/dockerlayers --pull -t "$CI_REGISTRY_IMAGE/jsonapi:$CI_COMMIT_REF_SLUG"
-    - docker push "$CI_REGISTRY_IMAGE/jsonapi:$CI_COMMIT_REF_SLUG"
-  except:
-    - master
-
-deploy-ribapi:
-  image: docker:latest
-  stage: deploy
-  services:
-    - docker:dind
-  tags: [docker]
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-
-  script:
-    #Формируем образы и пушем для postgres
-    - docker build ribapi/build/dockerlayers --pull -t "$CI_REGISTRY_IMAGE/ribapi:$CI_COMMIT_REF_SLUG"
-    - docker push "$CI_REGISTRY_IMAGE/ribapi:$CI_COMMIT_REF_SLUG"
-  except:
-    - master
-
-#Формируем образы докеров для бэк сервера
-deploy-backserver:
-  image: docker:latest
-  stage: deploy
-  services:
-    - docker:dind
-  tags: [docker]
-  before_script:
-    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" $CI_REGISTRY
-  script:
-    #Формируем образы и пушем для postgres
-    - docker build backServer/build/dockerlayers --pull -t "$CI_REGISTRY_IMAGE/backserver:$CI_COMMIT_REF_SLUG"
-    - docker push "$CI_REGISTRY_IMAGE/backserver:$CI_COMMIT_REF_SLUG"
-  except:
-    - master
-
-######## Скрипты для установки на тестовые сервера
-## установка на сервер 1
-test-server1:
-  image: reg.agria.pro:4567/docker/ansible
-  stage: install
-  variables:
-    REGISTRY_USERNAME: "$CI_REGISTRY_USER"
-    REGISTRY_TOKEN: "$CI_REGISTRY_PASSWORD"
-    PROJECT_NAME: "test1"
-    PROJECT_TAG: "$CI_COMMIT_REF_SLUG"
-    NGINX_HOST: "test1.agria.pro"
-    NGINX_PORT: "8080"
-    NGINX_PORT_SSL: "8443"
-    ANSIBLE_INVENT: "10.10.10.4:22"
-    ANSIBLE_SSH_PASS: "$ANSIBLE_SSH_PASS_TEST1"
-  script:
-    - ./runinstall.sh install,create,start
-  environment:
-    name: test/server1
-    url: https://test1.agria.pro:8443
-    on_stop: stop_review1
-  when:
-    manual
-
-## удаление с сервера 1
-stop_review1:
-  image: reg.agria.pro:4567/docker/ansible
-  stage: install
-  variables:
-    PROJECT_NAME: "test1"
-    PROJECT_TAG: "$CI_COMMIT_REF_SLUG"
-    ANSIBLE_INVENT: "10.10.10.4:22"
-    ANSIBLE_SSH_PASS: "$ANSIBLE_SSH_PASS_TEST1"
-  script:
-    - ./runinstall.sh create,stop
-  when: manual
-  environment:
-    name: test/server1
-    action: stop
-
-## установка на сервер 2
-test-server2:
-  image: reg.agria.pro:4567/docker/ansible
-  stage: install
-  variables:
-    REGISTRY_USERNAME: "$CI_REGISTRY_USER"
-    REGISTRY_TOKEN: "$CI_REGISTRY_PASSWORD"
-    PROJECT_NAME: "test2"
-    PROJECT_TAG: "$CI_COMMIT_REF_SLUG"
-    NGINX_HOST: "test2.agria.pro"
-    NGINX_PORT: "9080"
-    NGINX_PORT_SSL: "9443"
-    ANSIBLE_INVENT: "10.10.10.4:22"
-    ANSIBLE_SSH_PASS: "$ANSIBLE_SSH_PASS_TEST1"
-  script:
-    - ./runinstall.sh install,create,start
-  environment:
-    name: test/server2
-    url: https://test1.agria.pro:9443
-    on_stop: stop_review2
-  when:
-    manual
-## Удаление с сервера 2
-stop_review2:
-  image: reg.agria.pro:4567/docker/ansible
-  stage: install
-  variables:
-    PROJECT_NAME: "test2"
-    PROJECT_TAG: "$CI_COMMIT_REF_SLUG"
-    ANSIBLE_INVENT: "10.10.10.4:22"
-    ANSIBLE_SSH_PASS: "$ANSIBLE_SSH_PASS_TEST1"
-  script:
-    - ./runinstall.sh create,stop
-  when: manual
-  environment:
-    name: test/server2
-    action: stop
-
-bipay-server:
-  image: reg.agria.pro:4567/docker/ansible
-  stage: install
-  variables:
-    REGISTRY_USERNAME: "$CI_REGISTRY_USER"
-    REGISTRY_TOKEN: "$CI_REGISTRY_PASSWORD"
-    PROJECT_NAME: "bipay"
-    PROJECT_TAG: "$CI_COMMIT_REF_SLUG"
-    NGINX_HOST: "test1.bi-pay.ru"
-    NGINX_PORT: "8080"
-    NGINX_PORT_SSL: "8443"
-    ANSIBLE_INVENT: "test1.bi-pay.ru"
-    ANSIBLE_SSH_PASS: "$ANSIBLE_SSH_PASS_BIPAY"
-  script:
-    - ./runinstall.sh install,create,start
-  environment:
-    name: test/bipay
-    url: https://test1.bi-pay.ru
-  when:
-    manual
