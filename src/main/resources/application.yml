@@ -1,0 +1,13 @@
+server.port: 8888
+spring:
+  application:
+    name: config
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/OlegNyr/config-proc.git
+          searchPaths: rib
+          clone-on-start: true
+encrypt:
+  key: test
