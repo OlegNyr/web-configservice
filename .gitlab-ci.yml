@@ -69,8 +69,7 @@ deploy_prod:
     - git checkout $CI_BUILD_REF_NAME
     - git status
     - ./gradlew release -Prelease.useAutomaticVersion=true
-    -
-    - git push --tags
+
 
 #    - echo $CI_REPOSITORY_URL
 #    - git config --global user.name $GIT_ACCESS_USER
