@@ -14,7 +14,6 @@ before_script:
   - echo `pwd` # debug
   - echo "$CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG" # debug
   - export GRADLE_USER_HOME="/cache/$CI_PROJECT_NAME/gradle"
- собираем проект компилируем классы, проверяем checkstyle
 build:
   stage: build
   script: ./gradlew clean classes
