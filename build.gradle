@@ -93,6 +93,7 @@ publishing {
             def dir = 'https://dev.agria.pro/nexus/repository'
             def releasesRepoUrl = "${dir}/maven-releases"
             def snapshotsRepoUrl = "${dir}/maven-snapshots"
+            println "ghgh"+version
             url = version.endsWith('SNAPSHOT') ? snapshotsRepoUrl : releasesRepoUrl
         }
     }
