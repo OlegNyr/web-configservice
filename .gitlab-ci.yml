@@ -63,6 +63,10 @@ deploy_prod:
   environment:
     name: $CI_BUILD_REF_NAME
   script:
+    - git remote set-url origin https://olegnyr:glebycH123@dev.agria.pro/$CI_PROJECT_PATH.git
+    - git config --global user.name $GIT_ACCESS_USER
+    - git config --global user.email $GIT_ACCESS_EMAIL
+
     - git branch
     - ./gradlew release -Prelease.disableChecks -Prelease.pushTagsOnly
     - git push --tags
