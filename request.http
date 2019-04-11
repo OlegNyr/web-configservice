@@ -1,3 +1,6 @@
-http://localhost:8888/serviceregistry/rib/
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
 
 ###

@@ -1,0 +1,207 @@
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T101756.200.txt
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T101706.200.txt
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T101633.200.txt
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T101116.404.json
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T101103.404.json
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T095348.404.json
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T095307.404.json
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T094633.404.json
+
+###
+
+POST http://localhost:8888/encrypt
+Content-Type: application/x-www-form-urlencoded
+
+mysecret
+
+<> 2019-04-11T094535.404.json
+
+###
+
+GET http://localhost:8888/encrypt%20-d%20mysecret
+
+<> 2019-04-11T094427.404.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib/
+
+<> 2019-04-09T072159.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib/
+
+<> 2019-04-09T072043.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib/
+
+<> 2019-04-09T071959.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib/
+
+<> 2019-04-09T071807.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib,default/
+
+<> 2019-04-09T071757.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib,default/
+
+<> 2019-04-09T071643.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/default/
+
+<> 2019-04-09T071637.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib/
+
+<> 2019-04-09T071332.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/
+
+<> 2019-04-09T071326.404.json
+
+###
+
+GET http://localhost:8888/serviceregistry/maiin/
+
+<> 2019-04-09T071323.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry//
+
+<> 2019-04-09T071316.404.json
+
+###
+
+GET http://localhost:8888/serviceregistry/rib/
+
+<> 2019-04-09T071135.200.json
+
+###
+
+GET http://localhost:8888/serviceregistry/
+
+<> 2019-04-09T071102.404.json
+
+###
+
+GET http://localhost:8888/serviceregistry/dev/
+
+<> 2019-04-09T071055.200.json
+
+###
+
+GET http://localhost:8888/configservice/dev/
+
+<> 2019-04-09T071029.200.json
+
+###
+
+GET http://localhost:8888/configsevice/dev/
+
+<> 2019-04-09T071019.200.json
+
+###
+
+GET http://localhost:8888/configsevice/main/
+
+<> 2019-04-09T071013.200.json
+
+###
+
+GET http://localhost:8888/configsevice/
+
+<> 2019-04-09T071006.404.json
+
+###
+
+GET http://localhost:8888/reg/rib
+
+<> 2019-04-09T070941.200.json
+
+###
+
+GET http://localhost:8888
+
+<> 2019-04-09T070923.404.json
+
+###
+
