@@ -1,4 +1,4 @@
-image: reg.agria.pro:4567/docker/jdk8
+image: reg.agria.pro:4567/docker/jdk13
 
 stages:
   - build
@@ -38,7 +38,7 @@ test:
 #Собираем артефакты для формирования образов
 deploy_dev:
   stage: deploy
-  image: reg.agria.pro:4567/docker/jdk8
+  image: reg.agria.pro:4567/docker/jdk13
   script:
     - ./gradlew assemble publish
   cache:
@@ -56,7 +56,7 @@ deploy_dev:
 #так как в скрипте делаем pull, получается данны в ветке могут изменится
 deploy_prod:
   stage: deploy
-  image: reg.agria.pro:4567/docker/jdk8:jdkgit
+  image: reg.agria.pro:4567/docker/jdk13:jdkgit
   variables:
     CI_REPOSITORY_URL: git@dev.agria.pro:agri/proc.git
   #    CI_DEBUG_TRACE: "true"

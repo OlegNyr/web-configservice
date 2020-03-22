@@ -1,19 +1,22 @@
-import java.util.regex.Matcher
 plugins {
+    id 'org.springframework.boot' version '2.2.5.RELEASE'
     id 'net.researchgate.release' version '2.6.0'
-}
-
-
-plugins {
-    id 'org.springframework.boot' version '2.1.4.RELEASE'
+    id "com.gorylenko.gradle-git-properties" version "2.2.2"
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
 }
 
 apply plugin: 'io.spring.dependency-management'
+apply plugin: "com.gorylenko.gradle-git-properties"
 
 group = 'ru.nyrk'
-//version = '1.0.3-SNAPSHOT'
-sourceCompatibility = '1.8'
+sourceCompatibility = '13'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
 
 repositories {
     mavenCentral()
@@ -28,7 +31,8 @@ springBoot {
 }
 
 ext {
-    set('springCloudVersion', 'Greenwich.SR1')
+    set('springBootAdminVersion', "2.2.1")
+    set('springCloudVersion', "Hoxton.SR3")
 }
 
 dependencies {
@@ -36,7 +40,14 @@ dependencies {
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    testImplementation 'io.projectreactor:reactor-test'
 }
 
 dependencyManagement {
@@ -102,3 +113,8 @@ publishing {
 }
 
 afterReleaseBuild.dependsOn publish
+
+
+test {
+    useJUnitPlatform()
+}
