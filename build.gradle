@@ -132,7 +132,7 @@ jib {
     }
 
     to {
-        image = "${registry.image}/jsonapi:${registry.tag}";
+        image = "${registry.image}:${registry.tag}";
         auth {
             username = registry.user
             password = registry.password
