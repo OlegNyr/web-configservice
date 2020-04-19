@@ -3,6 +3,7 @@ plugins {
     id 'net.researchgate.release' version '2.6.0'
     id "com.gorylenko.gradle-git-properties" version "2.2.2"
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'com.google.cloud.tools.jib' version '2.2.0'
     id 'java'
 }
 
@@ -35,6 +36,7 @@ ext {
     set('springCloudVersion', "Hoxton.SR3")
 }
 
+apply from: "gradle/env.gradle"
 dependencies {
     implementation 'org.springframework.cloud:spring-cloud-config-server'
     implementation('org.springframework.boot:spring-boot-starter-actuator')
@@ -114,7 +116,51 @@ publishing {
 
 afterReleaseBuild.dependsOn publish
 
-
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 test {
     useJUnitPlatform()
+}
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+apply plugin: "com.google.cloud.tools.jib"
+jib {
+    from {
+        image = "${registry.baseImage}"
+        auth {
+            username = registry.user
+            password = registry.password
+        }
+    }
+
+    to {
+        image = "${registry.image}/jsonapi:${registry.tag}";
+        auth {
+            username = registry.user
+            password = registry.password
+        }
+    }
+    container {
+        entrypoint = "/app/run-java.sh"
+        args = ["run"]
+        environment = [
+                'JAVA_MAIN_CLASS': 'ru.nyrk.configservice.ConfigServiceApplication',
+                'JAVA_OPTIONS': ["-XX:+UnlockExperimentalVMOptions",
+                                 "-XX:+UseZGC",
+                                 "-Xmx1g",
+                                 "-Xlog:gc",
+                                 "-Djava.security.egd=file:/dev/./urandom",
+                                 "-XX:+UnlockDiagnosticVMOptions"]
+                        .join(' ')
+        ]
+        workingDirectory = "/app"
+        ports = ['8080']
+        labels = ['app': 'ribApi']
+        user = "1001"
+    }
+    extraDirectories {
+        paths = [ "${rootProject.projectDir}/jib" ]
+        permissions = [
+                '/app/run-java.sh': '755',
+                '/app/run-env.sh': '755',
+        ]
+    }
 }
