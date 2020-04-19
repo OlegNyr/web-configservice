@@ -145,14 +145,14 @@ jib {
                 'JAVA_MAIN_CLASS': 'ru.nyrk.configservice.ConfigServiceApplication',
                 'JAVA_OPTIONS': ["-XX:+UnlockExperimentalVMOptions",
                                  "-XX:+UseZGC",
-                                 "-Xmx1g",
+                                 "-Xmx256m",
                                  "-Xlog:gc",
                                  "-Djava.security.egd=file:/dev/./urandom",
                                  "-XX:+UnlockDiagnosticVMOptions"]
                         .join(' ')
         ]
         workingDirectory = "/app"
-        ports = ['8080']
+        ports = ['8888']
         labels = ['app': 'ribApi']
         user = "1001"
     }
