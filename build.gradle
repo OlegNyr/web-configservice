@@ -103,8 +103,8 @@ publishing {
     repositories {
         maven {
             credentials {
-                username findProperty("username")
-                password findProperty("password")
+                username = System.getenv('ORG_GRADLE_PROJECT_username')
+                password = System.getenv('ORG_GRADLE_PROJECT_password')
             }
             def dir = 'https://dev.agria.pro/nexus/repository'
             def releasesRepoUrl = "${dir}/maven-releases"
@@ -153,7 +153,7 @@ jib {
         ]
         workingDirectory = "/app"
         ports = ['8888']
-        labels = ['app': 'ribApi']
+        labels = ['app': 'configservice']
         user = "1001"
     }
     extraDirectories {
