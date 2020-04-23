@@ -41,10 +41,7 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-config-server'
     implementation('org.springframework.boot:spring-boot-starter-actuator')
     implementation('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client')
-
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
-    annotationProcessor 'org.projectlombok:lombok'
+    implementation('com.github.ben-manes.caffeine:caffeine')
 
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
@@ -143,24 +140,10 @@ jib {
         args = ["run"]
         environment = [
                 'JAVA_MAIN_CLASS': 'ru.nyrk.configservice.ConfigServiceApplication',
-                'JAVA_OPTIONS': ["-XX:+UnlockExperimentalVMOptions",
-                                 "-XX:+UseZGC",
-                                 "-Xmx256m",
-                                 "-Xlog:gc",
-                                 "-Djava.security.egd=file:/dev/./urandom",
-                                 "-XX:+UnlockDiagnosticVMOptions"]
-                        .join(' ')
-        ]
+       ]
         workingDirectory = "/app"
         ports = ['8888']
         labels = ['app': 'configservice']
         user = "1001"
-    }
-    extraDirectories {
-        paths = [ "${rootProject.projectDir}/jib" ]
-        permissions = [
-                '/app/run-java.sh': '755',
-                '/app/run-env.sh': '755',
-        ]
     }
 }
